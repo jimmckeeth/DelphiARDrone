@@ -146,38 +146,6 @@ end;
 
 { TARDrone }
 
-procedure TARDrone.AnglularSpeed(const yaw: Single);
-begin
-  SendCommand('AT*PCMD',Format('1,0,0,0,%d', [IEEEFloat(yaw)]));
-end;
-
-procedure TARDrone.AnimateDrone(const Animation: TDroneAnimation;
-  const DurationSeconds: Integer);
-begin
-  SendCommand('AT*ANIM', Format('%d,%d',
-    [Ord(Animation), DurationSeconds]));
-end;
-
-procedure TARDrone.AnimateLEDs(const Animation: TLEDAnimation;
-  const FreqHz: Single; const DurationSeconds: Integer);
-begin
-  SendCommand('AT*LED', Format('%d,%d,%d',
-    [Ord(Animation), IEEEFloat(FreqHz), DurationSeconds]));
-end;
-
-procedure TARDrone.Connect;
-begin
-  if not Assigned(udp) then
-  begin
-    udp := TIdUDPClient.Create(nil);
-    udp.Host := '192.168.1.1';
-    udp.Port := 5556;
-  end;
-
-  udp.Connect;
-  RestrictAltitude(2000);
-end;
-
 constructor TARDrone.Create;
 begin
   seq := 1;
@@ -196,9 +164,42 @@ begin
   inherited Destroy;
 end;
 
+procedure TARDrone.Connect;
+begin
+  if not Assigned(udp) then
+  begin
+    udp := TIdUDPClient.Create(nil);
+    udp.Host := '192.168.1.1';
+    udp.Port := 5556;
+  end;
+
+  udp.Connect;
+  RestrictAltitude(2000);
+  FlatTrims;
+end;
+
 procedure TARDrone.Disconnect;
 begin
   udp.Disconnect;
+end;
+
+procedure TARDrone.AnglularSpeed(const yaw: Single);
+begin
+  SendCommand('AT*PCMD',Format('1,0,0,0,%d', [IEEEFloat(yaw)]));
+end;
+
+procedure TARDrone.AnimateDrone(const Animation: TDroneAnimation;
+  const DurationSeconds: Integer);
+begin
+  SendCommand('AT*ANIM', Format('%d,%d',
+    [Ord(Animation), DurationSeconds]));
+end;
+
+procedure TARDrone.AnimateLEDs(const Animation: TLEDAnimation;
+  const FreqHz: Single; const DurationSeconds: Integer);
+begin
+  SendCommand('AT*LED', Format('%d,%d,%d',
+    [Ord(Animation), IEEEFloat(FreqHz), DurationSeconds]));
 end;
 
 procedure TARDrone.FlatTrims;
