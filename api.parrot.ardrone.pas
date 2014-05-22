@@ -71,7 +71,7 @@ type
     { Protected declarations }
     procedure UpdateMovement;
   public
-    constructor Create;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
     procedure Connect;
@@ -148,6 +148,7 @@ end;
 
 constructor TARDrone.Create;
 begin
+  inherited Create(AOwner);
   seq := 1;
   FOutdoor := True;
   FFlightWithoutShell := False;
