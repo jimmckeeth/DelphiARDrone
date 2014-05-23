@@ -1,6 +1,6 @@
 This component provides an interface to control the Parrot [AR.Drone 2.0 Quadricopter](http://ardrone2.parrot.com/). It uses the Indy TidUDP component internally to send the UDP packets directly to the Quadricopter. You just need to connect your device to the AR.Drone provided access point and this component does the rest.
 
-This currently only implements the basic movement controls for the Quadricopter. The methods are pretty straight forward to use. The values you can send are a single precision floating point number from -1 to 1. 
+This currently only implements the basic movement controls for the Quadricopter. The methods are pretty straightforward to use. The values you can send are a single precision floating point number in the range from -1 to 1. 
 
 Written with [Embarcadero Delphi XE6](http://www.embarcadero.com/products/delphi) in Object Pascal, but should also work with [C++Builder](http://www.embarcadero.com/products/cbuilder), [RAD Studio](http://www.embarcadero.com/products/rad-studio) or [Appmethod](http://www.appmethod.com) with a little effort.
 
