@@ -6,4 +6,6 @@ Written with [Embarcadero Delphi XE6](http://www.embarcadero.com/products/delphi
 
 Is designed to be cross platform and work in apps for Windows 32-bit, Windows 64-bit, OS X, Android and iOS.
 
+[YouTube Video Walkthrough an older version](https://www.youtube.com/watch?v=aaGe2aERwgI).
+
 **Note**: If you previously used the iOS controller app (or some other controller apps) then the Quadricopter may be paired to that device and you may need to reset it (the small recessed button in the battery compartment) before this component will work with the device.
