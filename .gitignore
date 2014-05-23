@@ -1,6 +1,12 @@
+#################
+# Delphi
+################
 *.local
 *.dcu
 .~??
+*.local
+*.identcache
+
 
 #################
 ## Eclipse
@@ -217,5 +223,3 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
-*.local
-*.identcache
