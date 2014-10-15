@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{2FC59482-98A0-4C69-8571-0C20D1C5331A}</ProjectGuid>
         <MainSource>ARDrone_pkg.dpk</MainSource>
-        <ProjectVersion>15.4</ProjectVersion>
+        <ProjectVersion>16.0</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
@@ -163,7 +163,7 @@
             <Deployment/>
             <Platforms>
                 <Platform value="Android">True</Platform>
-                <Platform value="iOSDevice" ActiveMobileDevice="%iosdevice%ebf1b29239b5116ea9da9b22b7f470931d156360">True</Platform>
+                <Platform value="iOSDevice">True</Platform>
                 <Platform value="iOSSimulator" ActiveMobileDevice="iPhone">True</Platform>
                 <Platform value="OSX32">True</Platform>
                 <Platform value="Win32">True</Platform>

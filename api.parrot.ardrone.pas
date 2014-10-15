@@ -9,6 +9,18 @@ uses
   IdBaseComponent, IdComponent, IdUDPBase, IdUDPClient;
 
 type
+  TDroneMovement = (
+    Hover,
+    MoveUp,
+    MoveDown,
+    MoveLeft,
+    MoveRight,
+    MoveForward,
+    MoveBackward,
+    RotateCW,
+    RotateCCW
+  );
+
   TLEDAnimation = (
     BlinkGreenRed,
     BlinkGreen,
@@ -61,6 +73,10 @@ type
     FPhi: Single;
     FOutdoor: Boolean;
     FFlightWithoutShell: Boolean;
+    FConnect: TNotifyEvent;
+    FDisconnect: TNotifyEvent;
+    procedure UdpConnect(sender: TObject);
+    procedure UdpDisconnet(sender: TObject);
     procedure SetGaz(const Value: Single);
     procedure SetPhi(const Value: Single);
     procedure SetTheta(const Value: Single);
@@ -89,6 +105,8 @@ type
 
     procedure Takeoff;
     procedure Land;
+    procedure Emergency;
+
     procedure FlatTrims; // Tell drone is is horizontal
     procedure Hover;
     procedure AnimateDrone(const Animation: TDroneAnimation; const DurationSeconds: Integer);
@@ -117,6 +135,8 @@ type
     property Gaz: Single read FGaz write SetGaz;
     property Outdoor: Boolean read FOutdoor write SetOutdoor default False;
     property FlightWithoutShell: Boolean read FFlightWithoutShell write SetFlightWithoutShell default True;
+    property OnConnect: TNotifyEvent read FConnect write FConnect;
+    property OnDisconnect: TNotifyEvent read FDisconnect write FDisconnect;
   end;
 
 function IEEEFloat(const aFloat: Single): Integer;
@@ -170,6 +190,8 @@ begin
   if not Assigned(udp) then
   begin
     udp := TIdUDPClient.Create(nil);
+    udp.OnConnected := UdpConnect;
+    udp.OnDisconnected := UdpDisconnet;
     udp.Host := '192.168.1.1';
     udp.Port := 5556;
   end;
@@ -220,11 +242,6 @@ begin
   FYaw := 0;
   FPhi := 0;
   UpdateMovement;
-end;
-
-procedure TARDrone.Land;
-begin
-  SendCommand('AT*REF','290717696');
 end;
 
 procedure TARDrone.LeftRightAngle(const phi: Single);
@@ -313,6 +330,7 @@ var
   full: string;
 begin
   if csDesigning in ComponentState then exit;
+  if not assigned(udp) then exit;
 
   if not udp.Active then Connect;
 
@@ -360,6 +378,28 @@ end;
 procedure TARDrone.Takeoff;
 begin
   SendCommand('AT*REF','290718208');
+end;
+
+procedure TARDrone.Emergency;
+begin
+  SendCommand('AT*REF','290717952');
+end;
+
+procedure TARDrone.Land;
+begin
+  SendCommand('AT*REF','290717696');
+end;
+
+procedure TARDrone.UdpConnect(sender: TObject);
+begin
+  if Assigned(FConnect) then
+    FConnect(self);
+end;
+
+procedure TARDrone.UdpDisconnet(sender: TObject);
+begin
+  if Assigned(FDisconnect) then
+    FDisconnect(self);
 end;
 
 procedure TARDrone.UnlimitedAltitude;
