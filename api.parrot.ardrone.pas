@@ -6,7 +6,9 @@ interface
 
 uses
   System.SysUtils, System.Classes,
-  IdBaseComponent, IdComponent, IdUDPBase, IdUDPClient;
+  IdBaseComponent, IdComponent, IdGlobal,
+  IdUDPBase, IdUDPClient,
+  IdTCPConnection, IdTCPClient;
 
 type
   TDroneMovement = (
@@ -66,6 +68,8 @@ type
   TARDrone = class(TComponent)
   private
     udp: TIdUDPClient;
+    navUdp: TIdUDPClient;
+
     seq: Integer;
     FGaz: Single;
     FTheta: Single;
@@ -83,6 +87,8 @@ type
     procedure SetYaw(const Value: Single);
     procedure SetOutdoor(const Value: Boolean);
     procedure SetFlightWithoutShell(const Value: Boolean);
+
+    procedure ConnectNavData;
   protected
     { Protected declarations }
     procedure UpdateMovement;
@@ -128,6 +134,7 @@ type
 
     // Full control of the movement (-1 to 1)
     procedure Move(const phi, theta, gaz, yaw: Single);
+
   published
     property Yaw: Single read FYaw write SetYaw;
     property Phi: Single read FPhi write SetPhi;
@@ -182,6 +189,12 @@ begin
   except
     udp := nil;
   end;
+  if Assigned(navUdp) then
+  try
+    navUdp.Free;
+  except
+    navUdp := nil;
+  end;
   inherited Destroy;
 end;
 
@@ -199,6 +212,25 @@ begin
   udp.Connect;
   RestrictAltitude(2000);
   FlatTrims;
+
+  // reduce NavData
+  Config('general:navdata_demo','TRUE');
+end;
+
+procedure TARDrone.ConnectNavData;
+var
+  Buf: TIdBytes;
+begin
+  if not Assigned(NavUDP) then
+  begin
+    NavUDP := TIdUDPClient.Create(nil);
+    NavUDP.Host := '192.168.1.1';
+    NavUDP.Port := 5554;
+    NavUDP.Connect;
+    SetLength(Buf, 5);
+    Buf[0] := 1;
+    NavUDP.SendBuffer(buf);
+  end;
 end;
 
 procedure TARDrone.Disconnect;

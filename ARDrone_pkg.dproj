@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{2FC59482-98A0-4C69-8571-0C20D1C5331A}</ProjectGuid>
         <MainSource>ARDrone_pkg.dpk</MainSource>
-        <ProjectVersion>16.0</ProjectVersion>
+        <ProjectVersion>16.1</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
